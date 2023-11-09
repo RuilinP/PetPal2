@@ -7,7 +7,7 @@ from .serializers import PetSerializer
 
 
 
-class PetListCreateView(generics.ListCreateAPIView):
+class PetCreateView(generics.ListCreateAPIView):
     queryset = Pet.objects.all()
     serializer_class = PetSerializer
 
