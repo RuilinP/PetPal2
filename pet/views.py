@@ -27,6 +27,7 @@ class PetListView(generics.ListAPIView):
         status = self.request.query_params.get('status', 'available')
         sort = self.request.query_params.get('sort', 'name')
 
+        #queryset = Pet.objects.filter(status=status).order_by(sort)
         queryset = Pet.objects.filter(status=status).order_by(sort)
 
         return queryset
