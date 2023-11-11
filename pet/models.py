@@ -6,7 +6,7 @@ class Pet(models.Model):
     name = models.CharField(max_length=255)
     gallery = models.TextField() #separate by comma
     breed = models.CharField(max_length=255)
-    age = models.IntegerField()
+    age = models.CharField(max_length=10)
     size = models.CharField(max_length=20)
     color = models.CharField(max_length=50)
     gender = models.CharField(max_length=10)

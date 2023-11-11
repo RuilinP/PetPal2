@@ -6,6 +6,7 @@ from .models import Pet
 from .serializers import PetSerializer
 from .filters import PetFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
 
 
 
@@ -56,25 +57,46 @@ class PetListSearch(generics.ListAPIView):
         sort = self.request.query_params.get('sort', 'id')
 
         name = self.request.query_params.get('name')
-        shelter = self.request.query_params.get('shelter')
-        status = self.request.query_params.get('status')
-        gender = self.request.query_params.get('gender')
+        shelter_param = self.request.query_params.get('shelter')
+        status_param = self.request.query_params.get('status')
+        gender_param = self.request.query_params.get('gender')
+        breed_param = self.request.query_params.get('breed')
 
         queryset = Pet.objects.all().order_by(sort)
-        if not status:
-            status = 'available'  
-            queryset = queryset.filter(status=status)
+        if not status_param:
+            status_param = 'Available'  
+            queryset = queryset.filter(status=status_param)
         else:
-            queryset = queryset.filter(status=status)
+            statuses = status_param.split(',')
+            query_filter = Q()
+            for status in statuses:
+                query_filter |= Q(status=status)
+            queryset = queryset.filter(query_filter)
+            
 
         
 
         if name:
             queryset = queryset.filter(name__icontains=name)
-        if shelter:
-            queryset = queryset.filter(breed__iexact=shelter)
-        # if status:
-        #     queryset = queryset.filter(color__iexact=status)
-        if gender:
-            queryset = queryset.filter(gender__iexact=gender)
+        if shelter_param:
+            shelters = shelter_param.split(',')
+            query_filter = Q()
+            for shelter in shelters:
+                query_filter |= Q(shelter=shelter)
+            queryset = queryset.filter(query_filter)
+        
+        if breed_param:
+            breeds = breed_param.split(',')
+            query_filter = Q()
+            for breed in breeds:
+                query_filter |= Q(breed=breed)
+            queryset = queryset.filter(query_filter)
+
+        if gender_param:
+            genders = gender_param.split(',')
+            query_filter = Q()
+            for gender in genders:
+                query_filter |= Q(gender=gender)
+            queryset = queryset.filter(query_filter)
+            # queryset = queryset.filter(gender__iexact=gender)
         return queryset
