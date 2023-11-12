@@ -31,7 +31,7 @@ class Preference(models.Model):
         (BIRD, BIRD),
         (RABBIT, RABBIT)
     )
-    preference = models.TextField(choices=ANIMAL_CHOICES)
+    preference = models.TextField(choices=ANIMAL_CHOICES, null=True, blank=True)
 
 class Seeker(CustomUser):
     phone_number = models.TextField(null=True, blank=True)
@@ -40,4 +40,4 @@ class Seeker(CustomUser):
     state = models.TextField(null=True, blank=True)
     city = models.TextField(null=True, blank=True)
     zip = models.TextField(null=True, blank=True)
-    preferences = models.ManyToManyField(Preference, null=True, blank=True)
+    preferences = models.ManyToManyField(Preference)
