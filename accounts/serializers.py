@@ -16,7 +16,7 @@ class PreferenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SeekerSerializer(serializers.ModelSerializer):
-    preferences = PreferenceSerializer(source="preference")
+    preferences = PreferenceSerializer(source="preference.preference")
 
     class Meta:
         model = Seeker
