@@ -1,12 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.hashers import make_password
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password):
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+        user.set_password(make_password(password))
+        user.save()
+        return user
 
 class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True)
     password = models.TextField()
-    confirm_password = models.TextField()
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     USERNAME_FIELD = "email"
+
+    objects = CustomUserManager()
 
 class Shelter(CustomUser):
     organization = models.TextField()
@@ -17,6 +29,14 @@ class Shelter(CustomUser):
     city = models.TextField()
     zip = models.TextField()
     mission_statement = models.TextField()
+
+class Seeker(CustomUser):
+    phone_number = models.TextField(null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    country = models.TextField(null=True, blank=True)
+    state = models.TextField(null=True, blank=True)
+    city = models.TextField(null=True, blank=True)
+    zip = models.TextField(null=True, blank=True)
 
 class Preference(models.Model):
     DOG = 'dog'
@@ -31,13 +51,5 @@ class Preference(models.Model):
         (BIRD, BIRD),
         (RABBIT, RABBIT)
     )
-    preference = models.TextField(choices=ANIMAL_CHOICES, null=True, blank=True)
-
-class Seeker(CustomUser):
-    phone_number = models.TextField(null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    country = models.TextField(null=True, blank=True)
-    state = models.TextField(null=True, blank=True)
-    city = models.TextField(null=True, blank=True)
-    zip = models.TextField(null=True, blank=True)
-    preferences = models.ManyToManyField(Preference)
+    preference = models.TextField(choices=ANIMAL_CHOICES)
+    owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE)
