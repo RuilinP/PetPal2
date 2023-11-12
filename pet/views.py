@@ -60,6 +60,7 @@ class PetListSearch(generics.ListAPIView):
         shelter_param = self.request.query_params.get('shelter')
         status_param = self.request.query_params.get('status')
         gender_param = self.request.query_params.get('gender')
+        specie_param = self.request.query_params.get('specie')
         breed_param = self.request.query_params.get('breed')
 
         queryset = Pet.objects.all().order_by(sort)
@@ -84,7 +85,12 @@ class PetListSearch(generics.ListAPIView):
             for shelter in shelters:
                 query_filter |= Q(shelter=shelter)
             queryset = queryset.filter(query_filter)
-        
+        if specie_param:
+            species = specie_param.split(',')
+            query_filter = Q()
+            for specie in species:
+                query_filter |= Q(specie=specie)
+            queryset = queryset.filter(query_filter)
         if breed_param:
             breeds = breed_param.split(',')
             query_filter = Q()

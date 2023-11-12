@@ -5,6 +5,7 @@ from django.db import models
 class Pet(models.Model):
     name = models.CharField(max_length=255)
     gallery = models.TextField() #separate by comma
+    specie = models.CharField(max_length=10)
     breed = models.CharField(max_length=255)
     age = models.CharField(max_length=10)
     size = models.CharField(max_length=20)

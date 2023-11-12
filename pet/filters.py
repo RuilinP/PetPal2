@@ -6,6 +6,7 @@ class PetFilter(django_filters.FilterSet):
         model = Pet
         fields = {
             'status': ['exact'],
+            'specie': ['exact'],
             'breed': ['exact'],
             'age': ['exact', 'lt', 'gt'],
             'size': ['exact'],
