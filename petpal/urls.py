@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', include('pet.urls')),
     path('', include('comments.urls')),
+    path('', include('notifications.urls')),
 ]
