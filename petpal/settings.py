@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'pet',
+    'django_extensions',
 ]
 
 # rest framework

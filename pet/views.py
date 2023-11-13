@@ -7,6 +7,8 @@ from .serializers import PetSerializer
 from .filters import PetFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated,SAFE_METHODS
+from .permissions import IsShelterUser
 
 
 
@@ -14,9 +16,20 @@ class PetCreateView(generics.CreateAPIView):
     queryset = Pet.objects.all()
     serializer_class = PetSerializer
 
+    permission_classes = [IsAuthenticated, IsShelterUser]
+
+    # def perform_create(self, serializer):
+    #     serializer.save(shelter=self.request.user.shelter)
+
+
 class PetRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pet.objects.all()
     serializer_class = PetSerializer
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return []
+        else:
+            return [IsAuthenticated(), IsShelterUser()]
 
 class PetListView(generics.ListAPIView):
     queryset = Pet.objects.all()
