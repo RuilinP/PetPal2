@@ -52,4 +52,4 @@ class Preference(models.Model):
         (RABBIT, RABBIT)
     )
     preference = models.TextField(choices=ANIMAL_CHOICES)
-    owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE)
+    owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE, null=True, blank=True)
