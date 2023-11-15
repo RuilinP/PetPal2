@@ -13,10 +13,10 @@ class ShelterSerializer(serializers.ModelSerializer):
 class PreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Preference
-        fields = '__all__'
+        fields = ['preference']
 
 class SeekerSerializer(serializers.ModelSerializer):
-    preferences = PreferenceSerializer(source="preference.preference")
+    preferences = serializers.ListField(child=PreferenceSerializer(), required=False)
 
     class Meta:
         model = Seeker

@@ -31,6 +31,8 @@ class Shelter(CustomUser):
     mission_statement = models.TextField()
 
 class Seeker(CustomUser):
+    first_name = models.TextField(null=True, blank=True)
+    last_name = models.TextField(null=True, blank=True)
     phone_number = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     country = models.TextField(null=True, blank=True)
@@ -52,4 +54,4 @@ class Preference(models.Model):
         (RABBIT, RABBIT)
     )
     preference = models.TextField(choices=ANIMAL_CHOICES)
-    owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE)
+    owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE, null=True, blank=True)

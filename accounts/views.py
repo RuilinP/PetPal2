@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.permissions import AllowAny, BasePermission
 from .serializers import ShelterSerializer, SeekerSerializer
-from .models import Shelter, Seeker
+from .models import Shelter, Seeker, Preference
 
 class ShelterListCreateView(ListCreateAPIView):
     serializer_class = ShelterSerializer
@@ -51,6 +51,17 @@ class SeekerCreateView(CreateAPIView):
     serializer_class = SeekerSerializer
     permission_classes = [AllowAny]
 
+    def perform_create(self, serializer):
+        # Remove preferences from the form data
+        preferences = serializer.validated_data.pop('preferences', tuple())
+
+        # Save the seeker first (otherwise preferences won't have a seeker to refer to)
+        seeker = Seeker.objects.create(**serializer.validated_data)
+
+        # Create a new preference object for each preference
+        for preference in preferences:
+            Preference.objects.create(**preference, owner=seeker)
+
 class SeekerRetrieveUpdatePermission(BasePermission):
     def has_permission(self, request, view):
         # Check if this is shelter retrieving seeker account with active application
@@ -75,6 +86,17 @@ class SeekerRetrieveUpdateView(RetrieveUpdateAPIView):
 
     def get_object(self):
         return get_object_or_404(Seeker, id=self.kwargs['pk'])
+    
+    def perform_update(self, serializer):
+        # Remove preferences from the form data
+        preferences = serializer.validated_data.pop('preferences', tuple())
+
+        # Save the seeker first (otherwise preferences won't have a seeker to refer to)
+        seeker = Seeker.objects.create(**serializer.validated_data)
+
+        # Create a new preference object for each preference
+        for preference in preferences:
+            Preference.objects.create(**preference, owner=seeker)
 
 class SeekerDestroyApplicationsView(DestroyAPIView):
     serializer_class = SeekerSerializer
