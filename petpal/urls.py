@@ -26,4 +26,5 @@ urlpatterns = [
     path('', include('pet.urls')),
     path('', include('comments.urls')),
     path('', include('notifications.urls')),
+    path('', include('application.urls')),
 ]

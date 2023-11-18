@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'comments',
     'notifications',
     'django_extensions',
+    'application',
 ]
 
 # rest framework
