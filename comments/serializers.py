@@ -16,14 +16,6 @@ class ReplySerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['author', 'comment', 'created_at', 'object_id', 'content_type']
 
-    def create(self, validated_data):
-        # set the author to the current user
-        user = self.context['request'].user
-        validated_data['author'] = user
-
-        return Reply.objects.create(**validated_data)
-
-
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.USERNAME_FIELD')
@@ -36,10 +28,3 @@ class CommentSerializer(serializers.ModelSerializer):
             'object_id', 'content_type', 'replies'
         ]
         read_only_fields = ['author', 'created_at', 'object_id', 'content_type']
-
-    def create(self, validated_data):
-        # set the author to the current user
-        user = self.context['request'].user
-        validated_data['author'] = user
-
-        return Comment.objects.create(**validated_data)

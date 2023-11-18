@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import Notification
 from django.urls import reverse
-from comments.models import Comment, Application, Reply
+from comments.models import Comment, Reply
+from application.models import Application
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 from accounts.models import Shelter

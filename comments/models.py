@@ -4,11 +4,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 
-class Application(models.Model):
-    applicant_name = models.CharField(max_length=100)
-    # other fields...
-
-
 
 class Comment(models.Model):
     RATING_CHOICES = [
