@@ -57,8 +57,7 @@ class ShelterDestroyNotificationsView(DestroyAPIView):
     permission_classes = [DestroyPermission]
 
     def get_queryset(self):
-        recipient = get_object_or_404(Shelter, id=self.kwargs['pk'])
-        return Notification.objects.filter(recipient=recipient)
+        return Notification.objects.filter(recipient=self.request.user)
 
 class SeekerCreateView(CreateAPIView):
     serializer_class = SeekerSerializer
@@ -124,5 +123,4 @@ class SeekerDestroyNotificationsView(DestroyAPIView):
     permission_classes = [DestroyPermission]
 
     def get_queryset(self):
-        recipient = get_object_or_404(Seeker, id=self.kwargs['pk'])
-        return Notification.objects.filter(recipient=recipient)
+        return Notification.objects.filter(recipient=self.request.user)
