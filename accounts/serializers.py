@@ -16,7 +16,7 @@ class PreferenceSerializer(serializers.ModelSerializer):
         fields = ['preference']
 
 class SeekerSerializer(serializers.ModelSerializer):
-    preferences = serializers.ListField(child=PreferenceSerializer(), required=False)
+    preferences = serializers.ListSerializer(child=PreferenceSerializer(), required=False)
 
     class Meta:
         model = Seeker
