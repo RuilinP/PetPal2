@@ -61,9 +61,9 @@ class ApplicationListPermission(BasePermission):
             return False
         return True
 
-class ApplicationRetrieveView(RetrieveAPIView):
-    serializer_class = ApplicationSerializer
-    permission_classes = [ApplicationRetrievePermission]
+# class ApplicationRetrieveView(RetrieveAPIView):
+#     serializer_class = ApplicationSerializer
+#     permission_classes = [ApplicationRetrievePermission]
 
 #     def get_object(self):
 #         return get_object_or_404(Application, id=self.kwargs['pk'])
