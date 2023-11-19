@@ -10,6 +10,7 @@ from .serializers import ApplicationSerializer
 from .models import Application
 from accounts.models import Seeker, Shelter
 from pet.models import Pet
+from notifications.signals import create_notification_for_user
 
 class ApplicationCreatePermission(BasePermission):
     def has_permission(self, request, view):
@@ -98,6 +99,15 @@ class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
                 else:
                     pet.status = "Adopted"
                 pet.save()
+
+                # Create a notification for:
+                # shelter if seeker updated the notification
+                # seeker if shelter updated the notification
+                if user.id == instance.seeker.id:
+                    create_notification_for_user(instance.shelter, instance)
+                else:
+                    create_notification_for_user(instance.seeker, instance)
+
                 
                 return Response(serializer.data)
         return Response({'error': 'You are not allowed to update this field.'}, status=status.HTTP_403_FORBIDDEN)

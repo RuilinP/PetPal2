@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .models import Comment
 from application.models import Application
-from accounts.models import Shelter, Seeker, CustomUser
+from accounts.models import Shelter, CustomUser
 from .serializers import CommentSerializer, ReplySerializer
 
 
@@ -22,7 +22,7 @@ class ApplicationCommentDetailView(APIView):
         # check if author is a seeker/shelter relevant to the application
         if application.seeker.id != author.id and application.shelter.id != author.id :
             # user not relevant to the application, unauthorize
-            Response({"detail": "You do not have permission to access this application."},
+            return Response({"detail": "You do not have permission to access this application."},
                     status=status.HTTP_403_FORBIDDEN)
         
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -40,9 +40,9 @@ class ApplicationCommentDetailView(APIView):
             # check if author is a seeker/shelter relevant to the application
             if content_object.seeker.id != author.id and content_object.shelter.id != author.id :
                 # user not relevant to the application, unauthorize
-                Response({"detail": "You do not have permission to access this application."},
+                return Response({"detail": "You do not have permission to access this application."},
                         status=status.HTTP_403_FORBIDDEN)
-            
+
             # save the new reply with the comment related to the application
             serializer.save(comment=comment, content_object=content_object, 
                             author = author,
@@ -64,7 +64,7 @@ class ApplicationCommentListView(APIView):
 
         if application.seeker.id != author.id and application.shelter.id != author.id :
             # user not relevant to the application, unauthorize
-            Response({"detail": "You do not have permission to access this application."},
+            return Response({"detail": "You do not have permission to access this application."},
                     status=status.HTTP_403_FORBIDDEN)
             
         # filter for comments associated with the application
@@ -83,7 +83,7 @@ class ApplicationCommentListView(APIView):
             author = get_object_or_404(CustomUser, pk=request.user.id)
             if content_object.seeker.id != author.id and content_object.shelter.id != author.id :
                 # user not relevant to the application, unauthorize
-                Response({"detail": "You do not have permission to access this application."},
+                return Response({"detail": "You do not have permission to access this application."},
                         status=status.HTTP_403_FORBIDDEN)
 
                 

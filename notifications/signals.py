@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 from .models import Notification
 from django.contrib.contenttypes.models import ContentType
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Shelter
 from comments.models import Comment, Reply
 from application.models import Application
 
@@ -62,11 +62,13 @@ def determine_comment_recipient(comment):
 @receiver(post_save, sender=Reply)
 def create_reply_notification(sender, instance, created, **kwargs):
     if created:
-        # create notif for shelter if it is a shelter reply
-        shelter = None
+        # if it is a shelter reply
         if is_shelter(instance.comment.content_object.id):
-            create_notification_for_user(instance.comment.author, instance)
             shelter = instance.comment.content_object
+        else: # it is an application reply
+            shelter = instance.comment.content_object.shelter
+
+        create_notification_for_user(shelter, instance)
 
         # create notif for comment author (if author is not themselves)
         if instance.comment.author != instance.author:
