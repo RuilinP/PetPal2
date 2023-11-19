@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny, BasePermission
+from rest_framework.response import Response
+from rest_framework import status
 from .serializers import ShelterSerializer, SeekerSerializer
 from .models import Shelter, Seeker, Preference
 from pet.models import Pet
 from application.models import Application
-from notifications.models import Notification
 
 class ShelterListCreatePermission(BasePermission):
     def has_permission(self, request, view):
@@ -51,13 +52,11 @@ class ShelterDestroyPetsView(DestroyAPIView):
 
     def get_queryset(self):
         return Pet.objects.filter(shelter=self.kwargs['pk'])
-
-class ShelterDestroyNotificationsView(DestroyAPIView):
-    serializer_class = ShelterSerializer
-    permission_classes = [DestroyPermission]
-
-    def get_queryset(self):
-        return Notification.objects.filter(recipient=self.request.user)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_queryset()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SeekerCreateView(CreateAPIView):
     serializer_class = SeekerSerializer
@@ -118,9 +117,7 @@ class SeekerDestroyApplicationsView(DestroyAPIView):
         seeker = get_object_or_404(Seeker, id=self.kwargs['pk'])
         return Application.objects.filter(seeker=seeker)
 
-class SeekerDestroyNotificationsView(DestroyAPIView):
-    serializer_class = SeekerSerializer
-    permission_classes = [DestroyPermission]
-
-    def get_queryset(self):
-        return Notification.objects.filter(recipient=self.request.user)
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_queryset()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

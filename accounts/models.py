@@ -21,9 +21,6 @@ class CustomUser(AbstractBaseUser):
 
     objects = CustomUserManager()
 
-    def __str__(self):
-        return f"{self.email}"
-
 class Shelter(CustomUser):
     organization = models.TextField()
     phone_number = models.TextField(validators=[
@@ -39,9 +36,6 @@ class Shelter(CustomUser):
     city = models.TextField()
     zip = models.TextField()
     mission_statement = models.TextField()
-
-    def __str__(self):
-        return f"Shelter: {self.email}"
 
 class Seeker(CustomUser):
     first_name = models.TextField(null=True, blank=True)
@@ -59,9 +53,6 @@ class Seeker(CustomUser):
     city = models.TextField(null=True, blank=True)
     zip = models.TextField(null=True, blank=True)
 
-    def __str__(self):
-        return f"Seeker: {self.email}"
-
 class Preference(models.Model):
     DOG = 'dog'
     CAT = 'cat'
@@ -77,6 +68,3 @@ class Preference(models.Model):
     )
     preference = models.TextField(choices=ANIMAL_CHOICES)
     owner = models.ForeignKey(Seeker, related_name="preferences", on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.preference}"
