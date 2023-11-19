@@ -5,7 +5,7 @@ from .models import Comment, Reply
 
 
 class ReplySerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.USERNAME_FIELD')
+    author = serializers.ReadOnlyField(source='author.email')
     comment = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -18,7 +18,7 @@ class ReplySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.USERNAME_FIELD')
+    author = serializers.ReadOnlyField(source='author.email')
     replies = ReplySerializer(many=True, read_only=True)
 
     class Meta:

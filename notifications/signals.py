@@ -3,9 +3,11 @@ from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 from .models import Notification
 from django.contrib.contenttypes.models import ContentType
-from accounts.models import Shelter, CustomUser
+from accounts.models import CustomUser
 from comments.models import Comment, Reply
 from application.models import Application
+
+
 
 def is_shelter(user_id):
     cur_user = get_object_or_404(CustomUser, pk=user_id)
@@ -13,17 +15,25 @@ def is_shelter(user_id):
         return False
     return True
 
+
+
+def create_notification_for_user(user, instance):
+    """ helper function to create notification for a user. """
+    Notification.objects.create(
+        recipient=user, 
+        content_object=instance,
+        object_id=instance.id,
+        content_type=ContentType.objects.get_for_model(instance)
+    )
+
+
+
 @receiver(post_save, sender=Comment)
 def create_comment_notification(sender, instance, created, **kwargs):
     if created:
-        recipient = determine_comment_recipient(instance)
-    
-        Notification.objects.create(
-            recipient=recipient, 
-            content_object=instance,
-            object_id=instance.id,
-            content_type=ContentType.objects.get_for_model(instance)
-        )
+        create_notification_for_user(determine_comment_recipient(instance), instance)
+
+
 
 def determine_comment_recipient(comment):
    
@@ -34,7 +44,6 @@ def determine_comment_recipient(comment):
 
     # determine if it is a shelter or application comment
     application_content_type = ContentType.objects.get_for_model(Application)
-    shelter_content_type = ContentType.objects.get_for_model(Shelter)
 
     if comment.content_type == application_content_type:
         # need to know the author type
@@ -53,35 +62,25 @@ def determine_comment_recipient(comment):
 @receiver(post_save, sender=Reply)
 def create_reply_notification(sender, instance, created, **kwargs):
     if created:
-        recipient = determine_reply_recipient(instance)
-    
-        Notification.objects.create(
-            recipient=recipient, 
-            content_object=instance,
-            object_id=instance.id,
-            content_type=ContentType.objects.get_for_model(instance)
-        )
+        # create notif for comment author
+        create_notification_for_user(instance.comment.author, instance)
 
+        # create notif for unique users who replies to the comment
+        replied_users = set()
+        for reply in instance.comment.replies.all():
+            # don't create for comment author or user themselves
+            if reply.author != instance.comment.author and reply.author != instance.author:
+                replied_users.add(reply.author)
 
-def determine_reply_recipient(reply):
-    
-    # for new shelter replies, the recipient is always the sender of the original comment  
-    return reply.comment.author
-
+        for user in replied_users:
+            create_notification_for_user(user, instance)
 
 
 
-# implement this: add a signal for applications too
 @receiver(post_save, sender=Application)
 def create_reply_notification(sender, instance, created, **kwargs):
+
     if created: # for new application submission, alert the shelter
-        recipient = instance.shelter
-    
-        Notification.objects.create(
-            recipient=recipient, 
-            content_object=instance,
-            object_id=instance.id,
-            content_type=ContentType.objects.get_for_model(instance)
-        )
+        create_notification_for_user(instance.shelter, instance)
 
     # implement this in application/views.py: alert the shelter and the seeker when application status is updated

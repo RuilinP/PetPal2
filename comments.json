@@ -12,14 +12,19 @@
     },
 
     {
+        "model": "comments.comment",
+        "pk": 1,
+        "fields": {
+            "rating": 1,
+            "text": "Correct shelter comment json format"
+        }
+    },
+
+    {
         "model": "comments.reply",
         "pk": 1,
         "fields": {
-            "author": 1, 
-            "comment": 1, 
-            "text": "Shelter replying to itself",
-            "object_id": 1, 
-            "content_type": 10
+            "text": "Correct shelter reply json format"
         }
     }
 ]
