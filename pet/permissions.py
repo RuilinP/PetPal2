@@ -8,11 +8,15 @@ class IsShelterUser(permissions.BasePermission):
             return False
 
         # Check if the user type is 'shelter'
-        print(request.user.id)
+        
+        if hasattr(request.user, 'seeker'):
+            return False
         return True
 
     def has_object_permission(self, request, view, obj):
         # Check if the shelter user's ID corresponds to the "shelter" field of the pet
+        if hasattr(request.user, 'seeker'):
+            return False
         return (
             request.user.is_authenticated 
             and obj.shelter == request.user.id
