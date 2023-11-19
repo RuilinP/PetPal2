@@ -1,0 +1,1091 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /accounts/shelters/:
+    get:
+      operationId: listShelters
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shelter'
+          description: ''
+      tags:
+      - accounts
+    post:
+      operationId: createShelter
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+      tags:
+      - accounts
+  /accounts/shelters/{id}/:
+    get:
+      operationId: retrieveShelter
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+      tags:
+      - accounts
+    put:
+      operationId: updateShelter
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+      tags:
+      - accounts
+    patch:
+      operationId: partialUpdateShelter
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+      tags:
+      - accounts
+  /accounts/seekers/{id}/:
+    get:
+      operationId: retrieveSeeker
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seeker'
+          description: ''
+      tags:
+      - accounts
+    put:
+      operationId: updateSeeker
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seeker'
+          description: ''
+      tags:
+      - accounts
+    patch:
+      operationId: partialUpdateSeeker
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seeker'
+          description: ''
+      tags:
+      - accounts
+  /pets/{id}:
+    get:
+      operationId: retrievePet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pet.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+      tags:
+      - pets
+    put:
+      operationId: updatePet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pet.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+      tags:
+      - pets
+    patch:
+      operationId: partialUpdatePet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pet.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+      tags:
+      - pets
+    delete:
+      operationId: destroyPet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this pet.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - pets
+  /pets/:
+    get:
+      operationId: listPets
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pet'
+          description: ''
+      tags:
+      - pets
+  /{user_id}/applications/{application_id}/comments/{comment_id}/:
+    get:
+      operationId: retrieveApplicationCommentDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+    post:
+      operationId: createApplicationCommentDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+  /{user_id}/shelters/{shelter_id}/comments/{comment_id}/:
+    get:
+      operationId: retrieveShelterCommentDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: shelter_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+    post:
+      operationId: createShelterCommentDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: shelter_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+  /{user_id}/shelters/{shelter_id}/comments/:
+    get:
+      operationId: listShelterComments
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: shelter_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - '{user-id}'
+    post:
+      operationId: createShelterCommentList
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: shelter_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+  /{user_id}/applications/{application_id}/comments/:
+    get:
+      operationId: listApplicationComments
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - '{user-id}'
+    post:
+      operationId: createApplicationCommentList
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: application_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+  /{user_id}/notifications/:
+    get:
+      operationId: listNotifications
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notification'
+          description: ''
+      tags:
+      - '{user-id}'
+  /{user_id}/notifications/{notification_id}/:
+    get:
+      operationId: retrieveNotificationDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: notification_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - '{user-id}'
+    delete:
+      operationId: destroyNotificationDetail
+      description: ''
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: notification_id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - '{user-id}'
+  /api/token/:
+    post:
+      operationId: createTokenObtainPair
+      description: 'Takes a set of user credentials and returns an access and refresh
+        JSON web
+
+        token pair to prove the authentication of those credentials.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+      tags:
+      - api
+  /api/token/refresher/:
+    post:
+      operationId: createTokenRefresh
+      description: 'Takes a refresh type JSON web token and returns an access type
+        JSON web
+
+        token if the refresh token is valid.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+      tags:
+      - api
+  /accounts/seekers/:
+    post:
+      operationId: createSeeker
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Seeker'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seeker'
+          description: ''
+      tags:
+      - accounts
+  /pet/:
+    post:
+      operationId: createPet
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+          description: ''
+      tags:
+      - pet
+  /accounts/shelters/{id}/pets/:
+    delete:
+      operationId: destroyShelter
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - accounts
+  /accounts/shelters/{id}/notifications/:
+    delete:
+      operationId: destroyShelter
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - accounts
+  /accounts/seekers/{id}/applications/:
+    delete:
+      operationId: destroySeeker
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - accounts
+  /accounts/seekers/{id}/notifications/:
+    delete:
+      operationId: destroySeeker
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - accounts
+components:
+  schemas:
+    Shelter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+        organization:
+          type: string
+        phone_number:
+          type: string
+        address:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+        mission_statement:
+          type: string
+      required:
+      - email
+      - password
+      - organization
+      - phone_number
+      - address
+      - country
+      - state
+      - city
+      - zip
+      - mission_statement
+    Seeker:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        preferences:
+          type: array
+          items:
+            type: object
+            properties:
+              preference:
+                enum:
+                - dog
+                - cat
+                - hamster
+                - bird
+                - rabbit
+                type: string
+            required:
+            - preference
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+        first_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+          nullable: true
+        phone_number:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        zip:
+          type: string
+          nullable: true
+      required:
+      - email
+      - password
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        gallery:
+          type: string
+        specie:
+          type: string
+          maxLength: 10
+        breed:
+          type: string
+          maxLength: 255
+        age:
+          type: string
+          maxLength: 10
+        size:
+          type: string
+          maxLength: 20
+        color:
+          type: string
+          maxLength: 50
+        gender:
+          type: string
+          maxLength: 10
+        location:
+          type: string
+        health:
+          type: string
+        characteristics:
+          type: string
+        story:
+          type: string
+        status:
+          type: string
+          maxLength: 20
+        shelter:
+          type: integer
+      required:
+      - name
+      - gallery
+      - specie
+      - breed
+      - age
+      - size
+      - color
+      - gender
+      - location
+      - health
+      - characteristics
+      - story
+      - status
+      - shelter
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        recipient:
+          type: string
+          readOnly: true
+        object_id:
+          type: integer
+          readOnly: true
+        content_type:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_read:
+          type: boolean
+          readOnly: true
+        content_object_url:
+          type: string
+          readOnly: true
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        refresh:
+          type: string
+        access:
+          type: string
+          readOnly: true
+      required:
+      - refresh

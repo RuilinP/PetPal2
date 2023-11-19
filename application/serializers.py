@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import Application
+from accounts.models import Shelter, Seeker 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    seeker = serializers.PrimaryKeyRelatedField(read_only=True)
-    shelter = serializers.PrimaryKeyRelatedField(read_only=True)
+    seeker = serializers.PrimaryKeyRelatedField(queryset=Seeker.objects.all())
+    shelter = serializers.PrimaryKeyRelatedField(queryset=Shelter.objects.all())
 
     class Meta:
         model = Application
