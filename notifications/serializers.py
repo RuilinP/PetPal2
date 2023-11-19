@@ -21,8 +21,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         if obj.content_object:
 
             if obj.content_type == ContentType.objects.get_for_model(Application):
-                # implement this: the related name for urls to the application details page may change
-                return reverse('application-detail', args=[obj.object_id])
+                return reverse('applications-retrieve', args=[obj.object_id])
             
             else : # comment or reply
                 if obj.content_type == ContentType.objects.get_for_model(Comment):
