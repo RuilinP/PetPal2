@@ -11,7 +11,7 @@ class Application(models.Model):
     ACCEPTED = 'accepted'
     DENIED = 'denied'
     WITHDRAWN = 'withdrawn'
-    STATUS_CHOICES = [ # seeker actions allowed: pending, accepted, withdrawn; shelter actions allowed: pending, accepted, denied
+    STATUS_CHOICES = [ # seeker actions allowed: pending/accepted -> withdrawn; shelter actions allowed: pending -> accepted/denied
         (PENDING, PENDING),
         (ACCEPTED, ACCEPTED),
         (DENIED, DENIED),

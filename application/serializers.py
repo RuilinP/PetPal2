@@ -11,4 +11,4 @@ class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = ['id', 'seeker', 'shelter', 'pet', 'status', 'message', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'seeker', 'shelter', 'pet', 'message', 'created_at', 'updated_at' ]
+        read_only_fields = ['id', 'seeker', 'shelter', 'pet', 'created_at', 'updated_at' ]

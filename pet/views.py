@@ -1,11 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 
 # views.py
 from rest_framework import generics
 from .models import Pet
 from .serializers import PetSerializer
 from .filters import PetFilter
-from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated,SAFE_METHODS
 from .permissions import IsShelterUser
@@ -56,7 +55,6 @@ class PetListSearch(generics.ListAPIView):
     filterset_class = PetFilter
 
     def get_queryset(self):
-        # status = self.request.query_params.get('status', 'available')
         sort = self.request.query_params.get('sort', 'id')
 
         name = self.request.query_params.get('name')
@@ -114,5 +112,4 @@ class PetListSearch(generics.ListAPIView):
             for gender in genders:
                 query_filter |= Q(gender=gender)
             queryset = queryset.filter(query_filter)
-            # queryset = queryset.filter(gender__iexact=gender)
         return queryset
