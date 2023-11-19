@@ -65,35 +65,35 @@ class ApplicationRetrieveView(RetrieveAPIView):
     serializer_class = ApplicationSerializer
     permission_classes = [ApplicationRetrievePermission]
 
-    def get_object(self):
-        return get_object_or_404(Application, id=self.kwargs['pk'])
+#     def get_object(self):
+#         return get_object_or_404(Application, id=self.kwargs['pk'])
 
-class ApplicationUpdateStatusAPIView(UpdateAPIView):
-    serializer_class = ApplicationSerializer
-    queryset = Application.objects.all()
-    permission_classes = [IsAuthenticated]
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        data = request.data
-        # pet_id = data['pet']
-        # pet = get_object_or_404(Application, id=pet_id)
-        if 'status' in data:
-            user = request.user
-            if (user.id == instance.shelter.id
-                and instance.status == 'pending' 
-                and data['status'] in ['accepted', 'denied']) or \
-            (user.id ==  instance.seeker.id
-             and instance.status in ['pending', 'accepted'] 
-             and data['status'] == 'withdrawn'):
-                serializer = self.get_serializer(instance, data=data, partial=True)
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                pet_id = instance.pet.id
-                pet = get_object_or_404(Pet, id=pet_id)
-                pet.status = data['status']
-                pet.save()
-                return Response(serializer.data)
-        return Response({'error': 'You are not allowed to update this field.'}, status=status.HTTP_403_FORBIDDEN)
+# class ApplicationUpdateStatusAPIView(UpdateAPIView):
+#     serializer_class = ApplicationSerializer
+#     queryset = Application.objects.all()
+#     permission_classes = [IsAuthenticated]
+#     def update(self, request, *args, **kwargs):
+#         instance = self.get_object()
+#         data = request.data
+#         # pet_id = data['pet']
+#         # pet = get_object_or_404(Application, id=pet_id)
+#         if 'status' in data:
+#             user = request.user
+#             if (user.id == instance.shelter.id
+#                 and instance.status == 'pending' 
+#                 and data['status'] in ['accepted', 'denied']) or \
+#             (user.id ==  instance.seeker.id
+#              and instance.status in ['pending', 'accepted'] 
+#              and data['status'] == 'withdrawn'):
+#                 serializer = self.get_serializer(instance, data=data, partial=True)
+#                 serializer.is_valid(raise_exception=True)
+#                 serializer.save()
+#                 pet_id = instance.pet.id
+#                 pet = get_object_or_404(Pet, id=pet_id)
+#                 pet.status = data['status']
+#                 pet.save()
+#                 return Response(serializer.data)
+#         return Response({'error': 'You are not allowed to update this field.'}, status=status.HTTP_403_FORBIDDEN)
 
 class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
     serializer_class = ApplicationSerializer
@@ -129,7 +129,8 @@ class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
                 pet.save()
                 
                 return Response(serializer.data)
-     
+        return Response({'error': 'You are not allowed to update this field.'}, status=status.HTTP_403_FORBIDDEN)
+
 
 class ApplicationListAPIView(ListAPIView):
     serializer_class = ApplicationSerializer

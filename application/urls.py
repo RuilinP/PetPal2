@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ApplicationCreateView, ApplicationRetrieveView, ApplicationListAPIView, ApplicationRetrieveUpdateStatusView
+from .views import ApplicationCreateView, ApplicationListAPIView, ApplicationRetrieveUpdateStatusView
 
 urlpatterns = [
     path('pets/<int:pk>/applications/', ApplicationCreateView.as_view(), name='applications-create'),
