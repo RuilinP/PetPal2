@@ -15,7 +15,11 @@ class Pet(models.Model):
     health = models.TextField()
     characteristics = models.TextField() #separate by comma
     story = models.TextField()
-    status = models.CharField(max_length=20)
+    PET_CHOICES = [
+        ("Available", "Available"),
+        ("Adopted", "Adopted"),
+    ]
+    status = models.CharField(max_length=20, choices=PET_CHOICES)
     shelter = models.IntegerField()
 
 
