@@ -47,7 +47,7 @@ def determine_comment_recipient(comment):
 
     if comment.content_type == application_content_type:
         # need to know the author type
-        if is_shelter(comment.author):
+        if is_shelter(comment.author.id):
             recipient = comment.content_object.seeker # get seeker obj from application
         else:
             recipient = comment.content_object.shelter  # get shelter obj from application
@@ -62,6 +62,12 @@ def determine_comment_recipient(comment):
 @receiver(post_save, sender=Reply)
 def create_reply_notification(sender, instance, created, **kwargs):
     if created:
+        # create notif for shelter if it is a shelter reply
+        shelter = None
+        if is_shelter(instance.comment.content_object.id):
+            create_notification_for_user(instance.comment.author, instance)
+            shelter = instance.comment.content_object
+
         # create notif for comment author (if author is not themselves)
         if instance.comment.author != instance.author:
             create_notification_for_user(instance.comment.author, instance)
@@ -70,7 +76,7 @@ def create_reply_notification(sender, instance, created, **kwargs):
         replied_users = set()
         for reply in instance.comment.replies.all():
             # don't create for comment author or user themselves
-            if reply.author != instance.comment.author and reply.author != instance.author:
+            if reply.author != instance.comment.author and reply.author != instance.author and reply.author != shelter:
                 replied_users.add(reply.author)
 
         for user in replied_users:
@@ -82,6 +88,7 @@ def create_reply_notification(sender, instance, created, **kwargs):
 def create_reply_notification(sender, instance, created, **kwargs):
 
     if created: # for new application submission, alert the shelter
+        # shelter = CustomUser.objects.filter(pk=instance.shelter
         create_notification_for_user(instance.shelter, instance)
 
     # implement this in application/views.py: alert the shelter and the seeker when application status is updated
