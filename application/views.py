@@ -93,7 +93,10 @@ class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
                 # Update the related pet's status
                 pet_id = instance.pet.id
                 pet = get_object_or_404(Pet, id=pet_id)
-                pet.status = data['status']
+                if data['status'] in ['withdrawn', 'denied']:
+                    pet.status = "Available"
+                else:
+                    pet.status = "Adopted"
                 pet.save()
                 
                 return Response(serializer.data)
