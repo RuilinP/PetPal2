@@ -9,6 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated,SAFE_METHODS
 from .permissions import IsShelterUser
+from rest_framework.response import Response
 
 
 
@@ -18,8 +19,8 @@ class PetCreateView(generics.CreateAPIView):
 
     permission_classes = [IsAuthenticated, IsShelterUser]
 
-    # def perform_create(self, serializer):
-    #     serializer.save(shelter=self.request.user.shelter)
+    def perform_create(self, serializer):
+        serializer.save(shelter=self.request.user.id)
 
 
 class PetRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -27,9 +28,24 @@ class PetRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PetSerializer
     def get_permissions(self):
         if self.request.method in SAFE_METHODS:
-            return []
+            return [IsAuthenticated()]
         else:
             return [IsAuthenticated(), IsShelterUser()]
+        
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        # Save the shelter as the authenticated user's ID
+        serializer.validated_data['shelter'] = request.user.id
+        self.perform_update(serializer)
+        return Response(serializer.data)
+        
+    
+
 
 class PetListView(generics.ListAPIView):
     queryset = Pet.objects.all()
