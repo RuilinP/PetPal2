@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.serializers import ValidationError
 from rest_framework.filters import OrderingFilter
@@ -80,11 +80,11 @@ class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
         if 'status' in data:
             user = request.user
             if (user.id == instance.shelter.id
-                and instance.status == 'pending' 
-                and data['status'] in ['accepted', 'denied']) or \
+                and instance.status == Application.PENDING
+                and data['status'] in [Application.ACCEPTED, Application.DENIED]) or \
                (user.id == instance.seeker.id
-                and instance.status in ['pending', 'accepted'] 
-                and data['status'] == 'withdrawn'):
+                and instance.status in [Application.PENDING, Application.ACCEPTED] 
+                and data['status'] == Application.WITHDRAWN):
                 
                 serializer = self.get_serializer(instance, data=data, partial=True)
                 serializer.is_valid(raise_exception=True)

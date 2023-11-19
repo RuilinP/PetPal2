@@ -81,7 +81,7 @@ class SeekerRetrieveUpdatePermission(BasePermission):
         # Check if this is shelter retrieving seeker account with active application
         if request.method in ["GET"] and request.user.id != view.kwargs['pk']:
             # Check if shelter has an active application from this seeker
-            return Application.objects.all().filter(shelter=request.user.id, seeker=view.kwargs['pk'], status='pending').exists()
+            return Application.objects.all().filter(shelter=request.user.id, seeker=view.kwargs['pk'], status=Application.PENDING).exists()
 
         return request.user.id == view.kwargs['pk']
 

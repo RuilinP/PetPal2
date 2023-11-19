@@ -7,13 +7,17 @@ class Application(models.Model):
     shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE, related_name='applications')
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='applications')
     
+    PENDING = 'pending'
+    ACCEPTED = 'accepted'
+    DENIED = 'denied'
+    WITHDRAWN = 'withdrawn'
     STATUS_CHOICES = [ # seeker actions allowed: pending, accepted, withdrawn; shelter actions allowed: pending, accepted, denied
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('denied', 'Denied'),
-        ('withdrawn', 'Withdrawn')
+        (PENDING, PENDING),
+        (ACCEPTED, ACCEPTED),
+        (DENIED, DENIED),
+        (WITHDRAWN, WITHDRAWN)
     ]
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
     message = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
