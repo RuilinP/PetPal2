@@ -62,8 +62,9 @@ def determine_comment_recipient(comment):
 @receiver(post_save, sender=Reply)
 def create_reply_notification(sender, instance, created, **kwargs):
     if created:
-        # create notif for comment author
-        create_notification_for_user(instance.comment.author, instance)
+        # create notif for comment author (if author is not themselves)
+        if instance.comment.author != instance.author:
+            create_notification_for_user(instance.comment.author, instance)
 
         # create notif for unique users who replies to the comment
         replied_users = set()
