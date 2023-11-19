@@ -7,8 +7,7 @@ class IsShelterUser(permissions.BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        # Check if the user type is 'shelter'
-        
+        # Check if the user type is 'shelter'        
         if hasattr(request.user, 'seeker'):
             return False
         return True

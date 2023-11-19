@@ -1,18 +1,46 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView,RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, BasePermission
-from .serializers import ApplicationSerializer
-from .models import Application
+from rest_framework.serializers import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
+from .serializers import ApplicationSerializer
+from .models import Application
+from accounts.models import Seeker, Shelter
 from pet.models import Pet
 
+class ApplicationCreatePermission(BasePermission):
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+        
+        # Check that user making request is a seeker
+        if not hasattr(request.user, 'seeker'):
+            return False
+        
+        pet = get_object_or_404(Pet, id=view.kwargs['pk'])
+
+        # Check that pet is available
+        return pet.status == 'Available'
 
 class ApplicationCreateView(CreateAPIView):
     serializer_class = ApplicationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ApplicationCreatePermission]
+
+    def perform_create(self, serializer):
+        serializer.validated_data['seeker'] = get_object_or_404(Seeker, id=self.request.user.id)
+        pet = get_object_or_404(Pet, id=self.kwargs['pk'])
+        serializer.validated_data['pet'] = pet
+        serializer.validated_data['shelter'] = get_object_or_404(Shelter, id=pet.shelter)
+
+        # Check if application already exists
+        applications = Application.objects.filter(pet=pet, seeker=serializer.validated_data['seeker'])
+        if len(applications) > 0:
+            raise ValidationError("Duplicate application.")
+
+        Application.objects.create(**serializer.validated_data)
 
 class ApplicationRetrievePermission(BasePermission):
     def has_permission(self, request, view):
@@ -23,17 +51,15 @@ class ApplicationRetrievePermission(BasePermission):
         # Check that user requesting is the application's seeker or shelter
         return request.user.id == application.seeker.id or request.user.id == application.shelter.id
 
-class ApplicationEditPermission(BasePermission):
+class ApplicationListPermission(BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        print(request.user.id)
-        print(view)
+
         application = Application.objects.filter(shelter=request.user)
         if not application:
             return False
         return True
-
 
 class ApplicationRetrieveView(RetrieveAPIView):
     serializer_class = ApplicationSerializer
@@ -107,7 +133,7 @@ class ApplicationRetrieveUpdateStatusView(RetrieveUpdateAPIView):
 
 class ApplicationListAPIView(ListAPIView):
     serializer_class = ApplicationSerializer
-    permission_classes = [ApplicationEditPermission]
+    permission_classes = [ApplicationListPermission]
     filter_backends = [OrderingFilter]
     ordering_fields = ['created_at', 'updated_at']
     pagination_class = PageNumberPagination
