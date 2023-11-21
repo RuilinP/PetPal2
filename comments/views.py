@@ -18,6 +18,7 @@ class ApplicationCommentDetailView(APIView):
         # check that the user and application exist
         author = get_object_or_404(CustomUser, pk=request.user.id)
         application = get_object_or_404(Application, pk=application_id)
+        content_type = ContentType.objects.get_for_model(Application)
 
         # check if author is a seeker/shelter relevant to the application
         if application.seeker.id != author.id and application.shelter.id != author.id :
@@ -25,7 +26,7 @@ class ApplicationCommentDetailView(APIView):
             return Response({"detail": "You do not have permission to access this application."},
                     status=status.HTTP_403_FORBIDDEN)
         
-        comment = get_object_or_404(Comment, pk=comment_id)
+        comment = get_object_or_404(Comment, pk=comment_id, content_type = content_type)
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
@@ -33,8 +34,8 @@ class ApplicationCommentDetailView(APIView):
         serializer = ReplySerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             content_object = get_object_or_404(Application, pk=application_id)
-            comment = get_object_or_404(Comment, pk=comment_id)
             content_type = ContentType.objects.get_for_model(Application)
+            comment = get_object_or_404(Comment, pk=comment_id, content_type=content_type)
 
             author = get_object_or_404(CustomUser, pk=request.user.id)
             # check if author is a seeker/shelter relevant to the application
@@ -103,8 +104,9 @@ class ShelterCommentDetailView(APIView):
         # check the user and shelter exist
         get_object_or_404(Shelter, pk=shelter_id)
         get_object_or_404(CustomUser, pk=request.user.id)
-
-        comment = get_object_or_404(Comment, pk = comment_id)
+        content_type = ContentType.objects.get_for_model(Shelter)
+        
+        comment = get_object_or_404(Comment, pk = comment_id, content_type = content_type)
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
@@ -112,8 +114,8 @@ class ShelterCommentDetailView(APIView):
         serializer = ReplySerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             content_object = get_object_or_404(Shelter, pk=shelter_id)
-            comment = get_object_or_404(Comment, pk=comment_id)
             content_type = ContentType.objects.get_for_model(Shelter)
+            comment = get_object_or_404(Comment, pk=comment_id, content_type=content_type)
 
             # check that the comment belongs to the shelter
             if comment.object_id != shelter_id:

@@ -63,7 +63,7 @@ def determine_comment_recipient(comment):
 def create_reply_notification(sender, instance, created, **kwargs):
     if created:
         # if it is a shelter reply
-        if is_shelter(instance.comment.content_object.id):
+        if instance.comment.content_type == ContentType.objects.get_for_model(Shelter):
             shelter = instance.comment.content_object
         else: # it is an application reply
             shelter = instance.comment.content_object.shelter
